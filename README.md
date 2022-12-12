@@ -1,5 +1,5 @@
 # training-js
-Practicing Java Script
+Practicando Java Script
 
  ✅ Ejercicios
  
