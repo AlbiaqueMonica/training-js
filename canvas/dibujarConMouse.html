@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibujando con el mouse</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+
+<body>
+    <!--Pautas: El código debe permitir dibujar círculos en la pantalla mientras el botón izquierdo se encuentra presionado
+
+    El desafío de este ejercicio es poder cambiar el color del pincel, haciendo clic en una paleta de colores que vamos a tener en el extremo izquierdo superior de nuestro canvas. Vamos a disponibilizar 3 colores para que el usuario pueda escoger el color que quiera en su pincel, los colores que usaremos serán el rojo, verde y azul -->
+
+
+    <canvas width="600" height="400">
+    </canvas>
+
+
+    <script>
+        const pantalla = document.querySelector("canvas");
+        const pincel = pantalla.getContext("2d");
+        let x = 0;
+        pincel.fillStyle = "rgb(238, 203, 223)";
+        pincel.fillRect(0, 0, 600, 400);
+
+        let puedoDibujar = false;
+        //Variables para dibujar la paleta
+        const xRojo = 0;
+        const xVerde = 50;
+        const xAzul = 100;
+        const yCuadrados = 0;
+        const tamanioCuadrados = 50;
+        let colorActual = "blue";
+
+        function dibujarCuadrado(x, y, tamanio, color) {
+            pincel.fillStyle = color;
+            pincel.fillRect(x, y, tamanio, tamanio);
+            pincel.fill();
+        }
+
+        function dibujarPaletaColores() {
+            dibujarCuadrado(xRojo, yCuadrados, tamanioCuadrados, 'red');
+            dibujarCuadrado(xVerde, yCuadrados, tamanioCuadrados, 'green');
+            dibujarCuadrado(xAzul, yCuadrados, tamanioCuadrados, 'blue');
+        }
+
+        function dibujarCirculo(x, y, colorActual) {
+
+            if (puedoDibujar) {
+                
+                pincel.fillStyle = colorActual;
+                pincel.beginPath();
+                pincel.arc(x, y, 5, 0, 2 * 3.14);
+                pincel.fill();
+            }
+
+        }
+
+
+
+        function habilitarDibujar() {
+
+            puedoDibujar = true;
+        }
+
+        function deshabilitarDibujar() {
+
+            puedoDibujar = false;
+        }
+
+        //Función para delimitar el área
+        function puedeDiseniarArea(xCoordenada, yCoordenada) {
+
+            if (xCoordenada >= 0 && (xCoordenada < (3 * tamanioCuadrados + 5)) &&
+                (yCoordenada >= 0 && yCoordenada < (tamanioCuadrados + 5))) {
+
+                return false;
+
+            } else {
+
+                return true;
+
+            }
+
+        }
+
+        function capturarMovimientoDelMouse(evento) {
+
+            var x = evento.pageX - pantalla.offsetLeft;
+            var y = evento.pageY - pantalla.offsetTop;
+
+            if (puedeDiseniarArea(x, y)) {
+
+                dibujarCirculo(x, y, colorActual);
+
+            }
+
+        }
+
+        function seleccionarColor(evento) {
+
+            const x = evento.pageX - pantalla.offsetLeft;
+            const y = evento.pageY - pantalla.offsetTop;
+
+            //Cada condición altera el color de la variable colorActual
+
+            //Comenzamos por la condición del eje Y que es común para todas
+            if (y > yCuadrados && y < (yCuadrados + tamanioCuadrados)) {
+
+                if (x > xRojo && x < (xRojo + tamanioCuadrados)) {
+
+                    colorActual = "red";
+
+                } else if (x > xVerde && x < (xVerde + tamanioCuadrados)) {
+
+                    colorActual = "green";
+                    
+                } else if (x > xAzul && x < (xAzul + tamanioCuadrados)) {
+
+                    colorActual = "blue";
+                }
+
+
+            }
+
+
+        }
+
+
+        pantalla.onmousemove = capturarMovimientoDelMouse;
+
+        pantalla.onmousedown = habilitarDibujar;
+
+        pantalla.onmouseup = deshabilitarDibujar;
+
+        dibujarPaletaColores();
+
+        pantalla.onclick = seleccionarColor;
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animación</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+
+<body>
+    <!--Pautas: 
+        Realizar una animación donde se dibuje una circunferencia y se mueva dentro de la pantalla, en ambos sentidos (llegando hasta los extremos izq y der) -->
+    <button>Iniciar Animación</button>
+    <canvas width="600" height="400">
+    </canvas>
+
+    <script>
+        let iniciarAnimacion = document.querySelector("button");
+        let pantalla = document.querySelector("canvas");
+        let pincel = pantalla.getContext("2d");
+        let x = 0;
+        let sentido = 1;
+
+        pincel.fillStyle = "rgb(238, 203, 223)";
+        pincel.fillRect(0, 0, 600, 400);
+
+
+        function drawCircle(x, y, radio) {
+            pincel.fillStyle = "blue";
+            pincel.beginPath();
+            pincel.arc(x, y, radio, 0, 2 * Math.PI);
+            pincel.fill();
+
+
+        }
+
+        function cleanScreen() {
+            pincel.clearRect(0, 0, 600, 400);
+
+        }
+
+        function updateScreen() {
+            cleanScreen();
+            if (x > 600) {
+                sentido = -1;
+            } else if (x < 0) {
+                sentido = 1;
+            }
+            drawCircle(x, 20, 10);
+            x = x + sentido;
+
+        }
+        function iniciar() {
+            setInterval(updateScreen, 1);
+            
+        }
+
+        iniciarAnimacion.onclick = iniciar;
+
+        
+    </script>
+
+</body>
+
+</html>
